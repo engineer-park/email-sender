@@ -26,7 +26,7 @@ async function sendEmail(message) {
 
 // Example usage
 const message = {
-    from: 'sender@example.com',
+    from: 'sender@example.com',  // Must be a verified sender in SendGrid
     to: 'receiver@example.com',
     subject: 'Test email',
     text: 'This is a test email',
