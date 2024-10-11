@@ -1,0 +1,43 @@
+require('dotenv').config();
+const sgMail = require('@sendgrid/mail');
+
+const apiKey = process.env.SENDGRID_API_KEY;
+
+if (!apiKey) {
+    throw new Error('SENDGRID_API_KEY is not defined in the environment variables');
+}
+
+sgMail.setApiKey(apiKey);
+
+/**
+ * Sends an email using SendGrid
+ * @param {Object} message - The message object containing email details
+ * @param {string} message.from - The sender's email address
+ * @param {string} message.to - The recipient's email address
+ * @param {string} message.subject - The subject of the email
+ * @param {string} message.text - The plain text body of the email
+ * @param {string} [message.html] - The HTML body of the email (optional)
+ */
+async function sendEmail(message) {
+    try {
+        await sgMail.send(message);
+        console.log('Successfully sent email');
+    } catch (error) {
+        console.error('Error sending email:', error.message);
+        if (error.response) {
+            console.error('SendGrid response error:', error.response.body);
+        }
+    }
+}
+
+// Example usage
+const message = {
+    from: 'sender@example.com',  // Must be a verified sender in SendGrid
+    to: 'receiver@example.com',
+    templateId: 'd-xxxxxxxxxxx',  // Template ID from SendGrid
+    dynamicTemplateData: {
+        code: '123456',  // Example dynamic data for the template
+    },
+};
+
+sendEmail(message);
